@@ -8,29 +8,30 @@
 
 import UIKit
 
-private let reuseIdentifier = "Cell"
+private let reuseIdentifier = "cell"
 
 class NewsFeedCollectionViewController: UICollectionViewController {
 
     
     //properties
-    let article: Article = Article(title: "News Dummy", content: "Dummy content", author: "JJ Dummy Author", publishedAt: "10. Jan 2019", image:UIImage(named: "langosch")!, imageUrl: "url")
+    let article: Article = Article(title: "News Dummy", content: "Dummy content. Dummy content.Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content. Dummy content.", author: "JJ Dummy Author", publishedAt: "10. Jan 2019", image:UIImage(named: "langosch")!, imageUrl: "url")
     var articles = [Article]()
-//    let newsFeed: NewsFeed = NewsFeed(status: 200, totalResults: articles.count)
+    var newsFeed: NewsFeed?
     @IBOutlet weak var newsFeedCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        articles.append(article)
-        articles.append(article)
-        articles.append(article)
+        for _ in 0...5 {
+            articles.append(article)
+        }
+        
+        newsFeed = NewsFeed(status: 200, totalResults: articles.count)
+        newsFeed?.articles = articles
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Register cell classes
-        self.newsFeedCollectionView!.register(NewsFeedCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.newsFeedCollectionView.delegate = self
         self.newsFeedCollectionView.dataSource = self
-        // Do any additional setup after loading the view.
     }
 
     /*
@@ -53,17 +54,27 @@ class NewsFeedCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return articles.count
+        return newsFeed!.totalResults
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! NewsFeedCollectionViewCell
-        cell.title.text = articles[indexPath.row].title
-        cell.content.text = articles[indexPath.row].content
-        cell.publishTime.text = articles[indexPath.row].publishTime
-        cell.author.text = articles[indexPath.row].author
-        cell.newsImage.image = articles[indexPath.row].image
+        cell.title.text = newsFeed!.articles[indexPath.row].title
+        cell.content.text = newsFeed!.articles[indexPath.row].content
+        cell.publishTime.text = newsFeed!.articles[indexPath.row].publishTime
+        cell.author.text = newsFeed!.articles[indexPath.row].author
+        cell.newsImage.image = newsFeed!.articles[indexPath.row].image
         
+        cell.contentView.layer.cornerRadius = 4.0
+        cell.contentView.layer.borderWidth = 1.0
+        cell.contentView.layer.borderColor = UIColor.clear.cgColor
+        cell.contentView.layer.masksToBounds = false
+        cell.layer.shadowColor = UIColor.gray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 1.0)
+        cell.layer.shadowRadius = 4.0
+        cell.layer.shadowOpacity = 1.0
+        cell.layer.masksToBounds = false
+        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
         return cell
     }
 
