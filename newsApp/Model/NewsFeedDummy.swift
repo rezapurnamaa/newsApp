@@ -7,11 +7,11 @@
 //
 
 import UIKit
-class NewsFeed: NSObject {
+class NewsFeedDummy: NSObject {
     //Properties
     var status: Int?
     var totalResults: Int = 0
-    var articles = [Article]()
+    var articles = [ArticleDummy]()
     
     //constructor
     init(status: Int, totalResults: Int) {

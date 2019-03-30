@@ -7,7 +7,7 @@
 //
 
 import UIKit
-class Article: NSObject {
+struct ArticleDummy {
     let title: String?
     let content: String?
     let author: String?
